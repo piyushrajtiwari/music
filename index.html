@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mukku Deep Site</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes flash {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0.5; }
+        }
+        
+        .flash {
+            animation: flash 1.5s;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 2rem;
+            border-radius: 1.5rem;
+            width: 80%;
+            max-width: 500px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(45deg, #1a237e, #4a148c, #0d47a1);
+            background-size: 300% 300%;
+            animation: gradient-animation 15s ease infinite;
+        }
+        
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .media-card {
+            transition: all 0.3s ease;
+            transform-origin: center;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+        
+        .media-card:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+            border-color: rgba(99, 102, 241, 0.6);
+        }
+        
+        .scrollbar-hidden::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .neon-text {
+            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff00de, 0 0 20px #ff00de;
+        }
+        
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+            transform: rotate(180deg);
+        }
+
+        .wave svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 100px;
+        }
+
+        .wave .shape-fill {
+            fill: rgba(99, 102, 241, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen font-['Poppins']">
+    <!-- Wave Background -->
+    <div class="fixed inset-0 overflow-hidden -z-10">
+        <div class="absolute top-0 left-0 w-full h-full">
+            <div class="wave">
+                <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                    <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" class="shape-fill"></path>
+                    <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" class="shape-fill"></path>
+                    <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" class="shape-fill"></path>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Page -->
+    <div id="login-page" class="flex flex-col items-center justify-center min-h-screen fade-in">
+        <div class="gradient-bg p-8 rounded-2xl shadow-xl w-full max-w-md relative overflow-hidden">
+            <div class="absolute -top-20 -right-20 w-40 h-40 bg-indigo-600 rounded-full filter blur-3xl opacity-40"></div>
+            <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-purple-600 rounded-full filter blur-3xl opacity-40"></div>
+            
+            <div class="relative z-10 text-center">
+                <div class="mb-6 pulse">
+                    <i class="fas fa-headphones text-indigo-300 text-6xl"></i>
+                </div>
+                
+                <h1 class="text-4xl font-bold mb-8 neon-text">Welcome to Mukku</h1>
+                
+                <div class="mb-6">
+                    <label class="block text-gray-200 mb-3 font-medium" for="password">Secret Password</label>
+                    <div class="relative">
+                        <input 
+                            type="password"
+                            id="password"
+                            class="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                            placeholder="Enter the secret phrase">
+                        <button id="toggle-password" class="absolute right-3 top-3 text-indigo-300 hover:text-white transition">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <button 
+                    id="login-btn"
+                    class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-3 px-4 rounded-xl transition duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 shadow-lg shadow-indigo-900/40">
+                    <span class="flex items-center justify-center">
+                        <i class="fas fa-lock-open mr-2"></i>Enter Mukku World
+                    </span>
+                </button>
+                
+                <div id="login-message" class="mt-4 text-center text-red-300 bg-red-900/30 py-2 px-4 rounded-lg hidden transition-all">
+                    <i class="fas fa-exclamation-circle mr-2"></i>Invalid password! Try "hi mukku"
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-8 text-indigo-300 font-medium">
+            <i class="fas fa-lightbulb mr-2"></i><span>Hint: What's the magic phrase?</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content" class="hidden flex flex-col min-h-screen">
+        <!-- Header -->
+        <header class="gradient-bg p-4 shadow-md flex justify-between items-center">
+            <div class="flex items-center">
+                <i class="fas fa-headphones text-indigo-300 text-2xl mr-3"></i>
+                <h1 class="text-2xl font-bold text-white">Mukku Media Vault</h1>
+            </div>
+            <div class="flex items-center space-x-3">
+                <button id="sort-toggle" class="text-indigo-200 hover:text-white transition flex items-center tooltip" data-tooltip="Sort Items">
+                    <i class="fas fa-sort-amount-down"></i>
+                </button>
+                <button id="search-toggle" class="text-indigo-200 hover:text-white transition flex items-center tooltip" data-tooltip="Search">
+                    <i class="fas fa-search"></i>
+                </button>
+                <button id="logout-btn" class="text-indigo-200 hover:text-white transition flex items-center">
+                    <i class="fas fa-sign-out-alt mr-1"></i>Logout
+                </button>
+            </div>
+        </header>
+        
+        <!-- Search Bar -->
+        <div id="search-bar" class="hidden bg-gray-800/80 p-3 border-b border-gray-700">
+            <div class="max-w-md mx-auto flex">
+                <input 
+                    type="text" 
+                    id="search-input"
+                    class="flex-grow bg-gray-700 text-white px-4 py-2 rounded-l-lg focus:outline-none focus:ring-1 focus:ring-indigo-500 border-r-0"
+                    placeholder="Search by title or date...">
+                <button 
+                    id="search-btn"
+                    class="bg-indigo-600 hover:bg-indigo-700 px-4 rounded-r-lg transition">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <main class="flex-grow p-4 sm:p-6">
+            <div class="flex flex-wrap items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold mb-3 sm:mb-0 text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">
+                    Your Mukku Collection
+                </h2>
+                <div>
+                    <button id="add-new-item" class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-2 px-4 rounded-lg transition flex items-center shadow-lg shadow-indigo-900/40">
+                        <i class="fas fa-plus mr-2"></i> Add New Item
+                    </button>
+                </div>
+            </div>
+            
+            <div id="mukku-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+                <!-- Items will be added here dynamically -->
+            </div>
+            
+            <div id="empty-state" class="text-center py-16 px-4 bg-gray-800/50 rounded-xl border border-dashed border-indigo-900">
+                <i class="fas fa-music text-indigo-400 text-6xl mb-4"></i>
+                <h3 class="text-xl font-semibold text-gray-200 mb-2">Your Mukku collection is empty</h3>
+                <p class="text-gray-400 max-w-md mx-auto">Click "Add New Item" to add your secret content - audio, video or links to your favorite music</p>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800/70 p-4 text-center text-sm text-gray-300 border-t border-gray-700">
+            <p>Mukku Deep Site - Your private media vault</p>
+        </footer>
+    </div>
+
+    <!-- Media Player Modal -->
+    <div id="media-modal" class="modal-overlay">
+        <div class="modal">
+            <div class="flex justify-between items-center mb-4">
+                <h2 id="media-title" class="text-2xl font-bold text-white"></h2>
+                <button id="close-media" class="text-gray-300 hover:text-white text-3xl transition">&times;</button>
+            </div>
+            
+            <div id="media-content" class="flex flex-col items-center mb-4">
+                <!-- Media content will be loaded here -->
+            </div>
+            
+            <div id="delete-control" class="pt-4 border-t border-gray-700">
+                <button id="delete-item" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg transition flex items-center justify-center">
+                    <i class="fas fa-trash mr-2"></i> Delete Item
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add New Item Modal -->
+    <div id="add-item-modal" class="modal-overlay">
+        <div class="modal">
+            <div class="flex justify-between items-center mb-5">
+                <h2 class="text-2xl font-bold text-white">Add New Mukku Item</h2>
+                <button id="close-add-modal" class="text-gray-300 hover:text-white text-3xl transition">&times;</button>
+            </div>
+            
+            <div class="space-y-4 overflow-y-auto max-h-[60vh] py-2 px-1">
+                <div>
+                    <label class="block text-gray-300 mb-2 font-medium" for="item-title">Item Title</label>
+                    <input 
+                        type="text" 
+                        id="item-title" 
+                        class="w-full px-4 py-2.5 rounded-xl bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+                        placeholder="Enter a title">
+                </div>
+                
+                <div>
+                    <label class="block text-gray-300 mb-2 font-medium">Upload Image</label>
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <div class="relative flex-grow">
+                            <button id="upload-photo" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-2.5 px-4 rounded-xl transition flex items-center justify-center">
+                                <i class="fas fa-image mr-2"></i> Choose Photo
+                            </button>
+                            <input type="file" id="photo-upload" accept="image/*" class="hidden">
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="photo-preview-container" class="hidden mb-1">
+                    <div class="border-2 border-dashed border-indigo-500/40 rounded-xl p-3 bg-gray-800/30">
+                        <img id="photo-preview" src="#" alt="Preview" class="max-h-48 w-full object-cover rounded-lg mx-auto">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-gray-300 mb-2 font-medium">Select Media Type</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <button id="audio-type" class="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white py-2.5 px-2 rounded-xl transition flex flex-col items-center justify-center">
+                            <i class="fas fa-music text-lg mb-1"></i> 
+                            <span>Audio</span>
+                        </button>
+                        <button id="video-type" class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-2.5 px-2 rounded-xl transition flex flex-col items-center justify-center">
+                            <i class="fas fa-video text-lg mb-1"></i> 
+                            <span>Video</span>
+                        </button>
+                        <button id="random-song" class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-2.5 px-2 rounded-xl transition flex flex-col items-center justify-center">
+                            <i class="fas fa-random text-lg mb-1"></i> 
+                            <span>Music Link</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Audio options -->
+                <div id="audio-options" class="hidden">
+                    <div>
+                        <label class="block text-gray-300 mb-2 font-medium" for="audio-upload">Upload Audio</label>
+                        <div class="flex">
+                            <input type="file" id="audio-upload" accept=".wav" class="flex-grow block w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-l-xl file:border-0 file:text-sm file:font-medium file:bg-indigo-600 file:text-white hover:file:bg-indigo-700">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Video options -->
+                <div id="video-options" class="hidden">
+                    <div>
+                        <label class="block text-gray-300 mb-2 font-medium" for="video-upload">Upload Video</label>
+                        <div class="flex">
+                            <input type="file" id="video-upload" accept=".mp4" class="flex-grow block w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-l-xl file:border-0 file:text-sm file:font-medium file:bg-indigo-600 file:text-white hover:file:bg-indigo-700">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Random song options -->
+                <div id="random-song-options" class="hidden">
+                    <div>
+                        <label class="block text-gray-300 mb-2 font-medium">Select Source</label>
+                        <select id="song-source" class="w-full px-4 py-2.5 rounded-xl bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="spotify">Spotify</option>
+                            <option value="local">Local File</option>
+                            <option value="youtube">YouTube</option>
+                        </select>
+                    </div>
+                    
+                    <div id="spotify-input" class="mt-3">
+                        <label class="block text-gray-300 mb-2 font-medium" for="spotify-link">Spotify Track Link</label>
+                        <input 
+                            type="text" 
+                            id="spotify-link" 
+                            class="w-full px-4 py-2.5 rounded-xl bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            placeholder="https://open.spotify.com/track/...">
+                    </div>
+                    
+                    <div id="youtube-input" class="mt-3 hidden">
+                        <label class="block text-gray-300 mb-2 font-medium" for="youtube-link">YouTube Link</label>
+                        <input 
+                            type="text" 
+                            id="youtube-link" 
+                            class="w-full px-4 py-2.5 rounded-xl bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            placeholder="https://youtube.com/watch?v=...">
+                    </div>
+                    
+                    <div id="local-song-input" class="mt-3 hidden">
+                        <label class="block text-gray-300 mb-2 font-medium" for="local-song">Upload MP3</label>
+                        <div class="flex">
+                            <input type="file" id="local-song" accept="audio/mp3" class="flex-grow block w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-l-xl file:border-0 file:text-sm file:font-medium file:bg-indigo-600 file:text-white hover:file:bg-indigo-700">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-7 sticky bottom-0 bg-gradient-to-r from-gray-800 to-gray-900 py-4 px-1 rounded-b-xl">
+                <button 
+                    id="save-item" 
+                    class="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-3 px-4 rounded-xl transition flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-green-600 disabled:hover:to-green-700"
+                    disabled>
+                    <i class="fas fa-save mr-2"></i> Save Mukku Item
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM elements
+            const loginPage = document.getElementById('login-page');
+            const mainContent = document.getElementById('main-content');
+            const passwordInput = document.getElementById('password');
+            const loginBtn = document.getElementById('login-btn');
+            const loginMessage = document.getElementById('login-message');
+            const togglePassword = document.getElementById('toggle-password');
+            const logoutBtn = document.getElementById('logout-btn');
+            const emptyState = document.getElementById('empty-state');
+            const mukkuGrid = document.getElementById('mukku-grid');
+            const addNewItemBtn = document.getElementById('add-new-item');
+            const addItemModal = document.getElementById('add-item-modal');
+            const closeAddModal = document.getElementById('close-add-modal');
+            const uploadPhotoBtn = document.getElementById('upload-photo');
+            const photoUpload = document.getElementById('photo-upload');
+            const photoPreviewContainer = document.getElementById('photo-preview-container');
+            const photoPreview = document.getElementById('photo-preview');
+            const audioTypeBtn = document.getElementById('audio-type');
+            const videoTypeBtn = document.getElementById('video-type');
+            const randomSongBtn = document.getElementById('random-song');
+            const audioOptions = document.getElementById('audio-options');
+            const videoOptions = document.getElementById('video-options');
+            const randomSongOptions = document.getElementById('random-song-options');
+            const saveItemBtn = document.getElementById('save-item');
+            const mediaModal = document.getElementById('media-modal');
+            const closeMediaBtn = document.getElementById('close-media');
+            const mediaTitle = document.getElementById('media-title');
+            const mediaContent = document.getElementById('media-content');
+            const deleteItemBtn = document.getElementById('delete-item');
+            const searchBar = document.getElementById('search-bar');
+            const searchInput = document.getElementById('search-input');
+            const searchBtn = document.getElementById('search-btn');
+            const searchToggle = document.getElementById('search-toggle');
+            const sortToggle = document.getElementById('sort-toggle');
+            
+            // State
+            let currentMediaType = null;
+            let currentPhoto = null;
+            let currentMediaFile = null;
+            
+            // Initialize form validation for any pre-filled values
+            setTimeout(validateForm, 100);
+            let mukkuItems = JSON.parse(localStorage.getItem('mukkuItems')) || [];
+            let currentPlayingItemId = null;
+            let sortOrder = 'newest'; // 'newest' or 'oldest'
+            
+            // Initialize the app
+            checkAuth();
+            renderMukkuItems();
+            
+            // Event listeners
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+            });
+            
+            loginBtn.addEventListener('click', login);
+            passwordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') login();
+            });
+            
+            logoutBtn.addEventListener('click', logout);
+            addNewItemBtn.addEventListener('click', () => addItemModal.style.display = 'flex');
+            closeAddModal.addEventListener('click', () => {
+                addItemModal.style.display = 'none';
+                resetMediaType();
+            });
+            
+            uploadPhotoBtn.addEventListener('click', () => photoUpload.click());
+            
+            photoUpload.addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    const file = e.target.files[0];
+                    
+                    // Validate image size
+                    if (file.size > 2 * 1024 * 1024) {
+                        showNotification('Image size too large! Max 2MB allowed.', 'bg-red-600');
+                        return;
+                    }
+                    
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(event) {
+                        currentPhoto = event.target.result;
+                        photoPreview.src = currentPhoto;
+                        photoPreviewContainer.classList.remove('hidden');
+                        validateForm();
+                    };
+                    
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            audioTypeBtn.addEventListener('click', function() {
+                setMediaType('audio');
+            });
+            
+            videoTypeBtn.addEventListener('click', function() {
+                setMediaType('video');
+            });
+            
+            randomSongBtn.addEventListener('click', function() {
+                setMediaType('random-song');
+            });
+            
+            document.getElementById('song-source').addEventListener('change', function() {
+                const source = this.value;
+                document.getElementById('spotify-input').classList.toggle('hidden', source !== 'spotify');
+                document.getElementById('youtube-input').classList.toggle('hidden', source !== 'youtube');
+                document.getElementById('local-song-input').classList.toggle('hidden', source !== 'local');
+                validateForm();
+            });
+            
+            saveItemBtn.addEventListener('click', saveMukkuItem);
+            closeMediaBtn.addEventListener('click', closeMediaPlayer);
+            deleteItemBtn.addEventListener('click', deleteCurrentItem);
+            searchToggle.addEventListener('click', toggleSearchBar);
+            searchBtn.addEventListener('click', searchItems);
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') searchItems();
+            });
+            sortToggle.addEventListener('click', toggleSortOrder);
+            
+            // Functions
+            function checkAuth() {
+                const isAuthenticated = localStorage.getItem('mukkuAuth') === 'authenticated';
+                if (isAuthenticated) {
+                    loginPage.classList.add('hidden');
+                    mainContent.classList.remove('hidden');
+                }
+            }
+            
+            function login() {
+                if (passwordInput.value.toLowerCase() === 'hi mukku') {
+                    localStorage.setItem('mukkuAuth', 'authenticated');
+                    loginPage.classList.add('hidden');
+                    mainContent.classList.remove('hidden');
+                    
+                    // Nice transition effect
+                    passwordInput.classList.add('flash');
+                    setTimeout(() => {
+                        passwordInput.classList.remove('flash');
+                    }, 1500);
+                } else {
+                    loginMessage.classList.remove('hidden');
+                    setTimeout(() => {
+                        loginMessage.classList.add('hidden');
+                    }, 2500);
+                }
+            }
+            
+            function logout() {
+                localStorage.removeItem('mukkuAuth');
+                location.reload();
+            }
+            
+            function setMediaType(type) {
+                currentMediaType = type;
+                
+                // Reset all buttons
+                audioTypeBtn.classList.remove('ring-2', 'ring-offset-2', 'ring-offset-gray-800', 'ring-purple-500');
+                videoTypeBtn.classList.remove('ring-2', 'ring-offset-2', 'ring-offset-gray-800', 'ring-blue-500');
+                randomSongBtn.classList.remove('ring-2', 'ring-offset-2', 'ring-offset-gray-800', 'ring-green-500');
+                
+                // Highlight selected button
+                if (type === 'audio') {
+                    audioTypeBtn.classList.add('ring-2', 'ring-offset-2', 'ring-offset-gray-800', 'ring-purple-500');
+                } else if (type === 'video') {
+                    videoTypeBtn.classList.add('ring-2', 'ring-offset-2', 'ring-offset-gray-800', 'ring-blue-500');
+                } else if (type === 'random-song') {
+                    randomSongBtn.classList.add('ring-2', 'ring-offset-2', 'ring-offset-gray-800', 'ring-green-500');
+                }
+                
+                // Show appropriate options
+                audioOptions.classList.add('hidden');
+                videoOptions.classList.add('hidden');
+                randomSongOptions.classList.add('hidden');
+                
+                if (type === 'audio') {
+                    audioOptions.classList.remove('hidden');
+                } else if (type === 'video') {
+                    videoOptions.classList.remove('hidden');
+                } else if (type === 'random-song') {
+                    randomSongOptions.classList.remove('hidden');
+                    
+                    // Reset to Spotify when showing random song options
+                    document.getElementById('song-source').value = 'spotify';
+                    document.getElementById('spotify-input').classList.remove('hidden');
+                    document.getElementById('youtube-input').classList.add('hidden');
+                    document.getElementById('local-song-input').classList.add('hidden');
+                }
+                
+                // Enable the save button if we have everything we need
+                validateForm();
+            }
+            
+            function resetMediaType() {
+                audioOptions.classList.add('hidden');
+                videoOptions.classList.add('hidden');
+                randomSongOptions.classList.add('hidden');
+                audioTypeBtn.classList.remove('ring-2', 'ring-offset-2', 'ring-offset-gray-800', 'ring-purple-500');
+                videoTypeBtn.classList.remove('ring-2', 'ring-offset-2', 'ring-offset-gray-800', 'ring-blue-500');
+                randomSongBtn.classList.remove('ring-2', 'ring-offset-2', 'ring-offset-gray-800', 'ring-green-500');
+                currentMediaType = null;
+                document.getElementById('item-title').value = '';
+                photoPreviewContainer.classList.add('hidden');
+                currentPhoto = null;
+                photoUpload.value = '';
+                document.getElementById('audio-upload').value = '';
+                document.getElementById('video-upload').value = '';
+                document.getElementById('spotify-link').value = '';
+                document.getElementById('youtube-link').value = '';
+                document.getElementById('local-song').value = '';
+                validateForm();
+            }
+            
+            function getSupportedAudioFormats() {
+                return ['audio/wav', 'audio/x-wav']; // Support WAV format variations
+            }
+            
+            function getSupportedVideoFormats() {
+                return ['video/mp4', 'video/x-m4v']; // Support MP4 format variations
+            }
+            
+            function validateForm() {
+                const titleInput = document.getElementById('item-title');
+                const hasTitle = titleInput.value.trim() !== '';
+                const hasPhoto = currentPhoto !== null;
+                let hasMedia = false;
+
+                if (currentMediaType === 'audio') {
+                    const fileInput = document.getElementById('audio-upload');
+                    if (fileInput.files.length > 0) {
+                        const file = fileInput.files[0];
+                        hasMedia = getSupportedAudioFormats().includes(file.type);
+                        if (!hasMedia) {
+                            showNotification(`Unsupported audio format. Please upload: MP3, WAV, OGG, M4A, or AAC`, 'bg-red-600');
+                        }
+                    }
+                } else if (currentMediaType === 'video') {
+                    const fileInput = document.getElementById('video-upload');
+                    if (fileInput.files.length > 0) {
+                        const file = fileInput.files[0];
+                        hasMedia = getSupportedVideoFormats().includes(file.type);
+                        if (!hasMedia) {
+                            showNotification(`Only MP4 video format is supported. Please convert your video to MP4.`, 'bg-red-600');
+                        }
+                    }
+                } else if (currentMediaType === 'random-song') {
+                    const source = document.getElementById('song-source').value;
+                    if (source === 'spotify') {
+                        hasMedia = document.getElementById('spotify-link').value.trim() !== '';
+                    } else if (source === 'youtube') {
+                        hasMedia = document.getElementById('youtube-link').value.trim() !== '';
+                    } else if (source === 'local') {
+                        const fileInput = document.getElementById('local-song');
+                        hasMedia = fileInput.files.length > 0;
+                        if (hasMedia) {
+                            const file = fileInput.files[0];
+                            hasMedia = file.type.startsWith('audio/');
+                        }
+                    }
+                }
+                
+                saveItemBtn.disabled = !(hasTitle && hasPhoto && hasMedia && currentMediaType !== null);
+            }
+            
+            function saveMukkuItem() {
+                const title = document.getElementById('item-title').value.trim();
+                if (!title || !currentMediaType || !currentPhoto) {
+                    showNotification('Please fill all required fields!', 'bg-red-600');
+                    return;
+                }
+
+                const id = Date.now().toString();
+                const date = new Date().toISOString();
+                let mediaData = null;
+                
+                if (currentMediaType === 'audio') {
+                    const file = document.getElementById('audio-upload').files[0];
+                    const supportedAudioTypes = getSupportedAudioFormats();
+                    if (!file || (!file.name.toLowerCase().endsWith('.wav') && !supportedAudioTypes.includes(file.type))) {
+                        showNotification(`Please select a valid WAV audio file`, 'bg-red-600');
+                        return;
+                    }
+                    
+                    if (!file) {
+                        showNotification('Please select an audio file!', 'bg-red-600');
+                        return;
+                    }
+                    
+                    if (file.size > 10 * 1024 * 1024) {
+                        showNotification('Audio file too large! Max 10MB.', 'bg-red-600');
+                        return;
+                    }
+                    
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        mediaData = {
+                            type: 'audio',
+                            fileType: file.type,
+                            filename: file.name,
+                            data: e.target.result
+                        };
+                        
+                        createAndSaveItem(title, id, date, mediaData);
+                    };
+                    
+                    reader.readAsDataURL(file);
+                    
+                } else if (currentMediaType === 'video') {
+                    const file = document.getElementById('video-upload').files[0];
+                    const supportedVideoTypes = getSupportedVideoFormats();
+                    if (!file || (!file.name.toLowerCase().endsWith('.mp4') && !supportedVideoTypes.includes(file.type))) {
+                        showNotification(`Please select a valid MP4 video file`, 'bg-red-600');
+                        return;
+                    }
+                    
+                    if (file.size > 25 * 1024 * 1024) {
+                        showNotification('Video file too large! Max 25MB.', 'bg-red-600');
+                        return;
+                    }
+                    
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        mediaData = {
+                            type: 'video',
+                            fileType: file.type,
+                            filename: file.name,
+                            data: e.target.result
+                        };
+                        
+                        createAndSaveItem(title, id, date, mediaData);
+                    };
+                    
+                    reader.readAsDataURL(file);
+                    
+                } else if (currentMediaType === 'random-song') {
+                    const source = document.getElementById('song-source').value;
+                    
+                    if (source === 'spotify') {
+                        const spotifyLink = document.getElementById('spotify-link').value.trim();
+                        
+                        if (!spotifyLink) {
+                            showNotification('Please enter a Spotify link!', 'bg-red-600');
+                            return;
+                        }
+                        
+                        mediaData = {
+                            type: 'random-song',
+                            source: 'spotify',
+                            link: spotifyLink
+                        };
+                        
+                    } else if (source === 'youtube') {
+                        const youtubeLink = document.getElementById('youtube-link').value.trim();
+                        
+                        if (!youtubeLink) {
+                            showNotification('Please enter a YouTube link!', 'bg-red-600');
+                            return;
+                        }
+                        
+                        mediaData = {
+                            type: 'random-song',
+                            source: 'youtube',
+                            link: youtubeLink
+                        };
+                        
+                    } else if (source === 'local') {
+                        const file = document.getElementById('local-song').files[0];
+                        if (!file || !file.type.startsWith('audio/')) {
+                            showNotification('Please select a valid audio file!', 'bg-red-600');
+                            return;
+                        }
+                        
+                        const reader = new FileReader();
+                        
+                        reader.onload = function(e) {
+                            mediaData = {
+                                type: 'random-song',
+                                source: 'local',
+                                fileType: file.type,
+                                filename: file.name,
+                                data: e.target.result
+                            };
+                            
+                            createAndSaveItem(title, id, date, mediaData);
+                        };
+                        
+                        reader.readAsDataURL(file);
+                        return; // We'll return here because the rest will be handled in the callback
+                    }
+                }
+                
+                createAndSaveItem(title, id, date, mediaData);
+            }
+            
+            function createAndSaveItem(title, id, date, mediaData) {
+                if (!title || !mediaData) {
+                    showNotification('Invalid data for saving!', 'bg-red-600');
+                    return;
+                }
+
+                try {
+                    const newItem = {
+                        id: id,
+                        title: title,
+                        photo: currentPhoto,
+                        media: mediaData,
+                        date: date
+                    };
+                    
+                    mukkuItems.push(newItem);
+                    localStorage.setItem('mukkuItems', JSON.stringify(mukkuItems));
+                    
+                    showNotification('Mukku item saved successfully!', 'bg-green-600');
+                    
+                    // Reset form
+                    resetMediaType();
+                    addItemModal.style.display = 'none';
+                    
+                    // Refresh items
+                    renderMukkuItems();
+                } catch (error) {
+                    console.error('Error saving item:', error);
+                    showNotification('Failed to save item!', 'bg-red-600');
+                }
+            }
+            
+            function renderMukkuItems() {
+                mukkuGrid.innerHTML = '';
+                
+                if (mukkuItems.length === 0) {
+                    emptyState.classList.remove('hidden');
+                    return;
+                }
+                
+                emptyState.classList.add('hidden');
+                
+                // Sort items based on current sort order
+                const sortedItems = [...mukkuItems];
+                sortedItems.sort((a, b) => {
+                    if (sortOrder === 'newest') {
+                        return new Date(b.date) - new Date(a.date);
+                    } else {
+                        return new Date(a.date) - new Date(b.date);
+                    }
+                });
+                
+                sortedItems.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'media-card bg-gray-800 rounded-xl overflow-hidden shadow-lg cursor-pointer';
+                    itemElement.dataset.id = item.id;
+                    
+                    // Determine media type icon
+                    let iconClass = 'fas fa-file';
+                    if (item.media.type === 'audio') {
+                        iconClass = 'fas fa-music text-purple-400';
+                    } else if (item.media.type === 'video') {
+                        iconClass = 'fas fa-video text-blue-400';
+                    } else if (item.media.type === 'random-song') {
+                        iconClass = 'fas fa-link text-green-400';
+                    }
+                    
+                    itemElement.innerHTML = `
+                        <div class="relative">
+                            <img src="${item.photo}" alt="${item.title}" class="w-full h-48 object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-90"></div>
+                            <div class="absolute top-2 right-2 bg-indigo-700 px-2 py-1 rounded-md text-xs">
+                                <i class="${iconClass}"></i>
+                            </div>
+                            <div class="absolute bottom-3 left-3">
+                                <h3 class="font-bold text-lg truncate max-w-[90%]">${item.title}</h3>
+                            </div>
+                        </div>
+                        <div class="p-4 pt-2 text-gray-300">
+                            <div class="flex items-center justify-between text-sm">
+                                <span>${new Date(item.date).toLocaleDateString()}</span>
+                                <button class="delete-btn text-gray-400 hover:text-red-400">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    itemElement.addEventListener('click', () => playMukkuItem(item.id));
+                    
+                    // Add delete button event listener
+                    const deleteBtn = itemElement.querySelector('.delete-btn');
+                    deleteBtn.addEventListener('click', function(e) {
+                        e.stopPropagation(); // Prevent triggering the play event
+                        deleteMukkuItem(item.id);
+                    });
+                    
+                    mukkuGrid.appendChild(itemElement);
+                });
+            }
+            
+            function playMukkuItem(id) {
+                const item = mukkuItems.find(i => i.id === id);
+                if (!item) return;
+                
+                currentPlayingItemId = id;
+                mediaTitle.textContent = item.title;
+                mediaContent.innerHTML = '';
+                
+                if (item.media.type === 'audio') {
+                    mediaContent.innerHTML = `
+                        <div class="w-full">
+                            <p class="text-gray-300 text-sm mb-1">Playing: ${item.media.filename || 'Audio File'}</p>
+                            <audio controls autoplay class="w-full mt-2">
+                                <source src="${item.media.data}" type="${item.media.fileType}">
+                                Your browser does not support the audio element.
+                            </audio>
+                        </div>
+                    `;
+                } else if (item.media.type === 'video') {
+                    mediaContent.innerHTML = `
+                        <div class="w-full">
+                            <p class="text-gray-300 text-sm mb-1">Playing: ${item.media.filename || 'Video File'}</p>
+                            <video controls autoplay class="w-full max-h-80">
+                                <source src="${item.media.data}" type="${item.media.fileType}">
+                                Your browser does not support the video element.
+                            </video>
+                        </div>
+                    `;
+                } else if (item.media.type === 'random-song') {
+                    if (item.media.source === 'spotify') {
+                        const trackId = getSpotifyTrackId(item.media.link);
+                        if (trackId) {
+                            mediaContent.innerHTML = `
+                                <div class="w-full mt-2">
+                                    <iframe src="https://open.spotify.com/embed/track/${trackId}" width="100%" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                                    <p class="text-gray-300 mt-3 text-sm">Playing from Spotify</p>
+                                </div>
+                            `;
+                        } else {
+                            mediaContent.innerHTML = `
+                                <div class="text-center py-6">
+                                    <i class="fas fa-exclamation-triangle text-yellow-500 text-3xl mb-3"></i>
+                                    <p class="text-gray-300">Invalid Spotify URL</p>
+                                </div>
+                            `;
+                        }
+                    } else if (item.media.source === 'youtube') {
+                        const videoId = getYouTubeId(item.media.link);
+                        if (videoId) {
+                            mediaContent.innerHTML = `
+                                <div class="w-full mt-2">
+                                    <iframe width="100%" height="250" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    <p class="text-gray-300 mt-3 text-sm">Playing from YouTube</p>
+                                </div>
+                            `;
+                        } else {
+                            mediaContent.innerHTML = `
+                                <div class="text-center py-6">
+                                    <i class="fas fa-exclamation-triangle text-yellow-500 text-3xl mb-3"></i>
+                                    <p class="text-gray-300">Invalid YouTube URL</p>
+                                </div>
+                            `;
+                        }
+                    } else if (item.media.source === 'local') {
+                        mediaContent.innerHTML = `
+                            <div class="w-full">
+                                <p class="text-gray-300 text-sm mb-1">Playing: ${item.media.filename || 'Local File'}</p>
+                                <audio controls autoplay class="w-full mt-2">
+                                    <source src="${item.media.data}" type="${item.media.fileType}">
+                                    Your browser does not support the audio element.
+                                </audio>
+                            </div>
+                        `;
+                    }
+                }
+                
+                mediaModal.style.display = 'flex';
+            }
+            
+            function getSpotifyTrackId(spotifyUrl) {
+                const patterns = [
+                    /spotify:track:([a-zA-Z0-9]+)/,
+                    /track\/([a-zA-Z0-9]+)/,
+                    /\/track\/([a-zA-Z0-9]+)/,
+                    /[?&]track=([a-zA-Z0-9]+)/
+                ];
+                
+                for (const pattern of patterns) {
+                    const match = spotifyUrl.match(pattern);
+                    if (match && match[1]) {
+                        return match[1];
+                    }
+                }
+                return '';
+            }
+            
+            function getYouTubeId(url) {
+                var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+                var match = url.match(regExp);
+                return (match&&match[7].length==11)? match[7] : false;
+            }
+            
+            function closeMediaPlayer() {
+                mediaModal.style.display = 'none';
+                // Pause all media when closing the modal
+                const audioElements = mediaContent.querySelectorAll('audio, video');
+                audioElements.forEach(el => el.pause());
+                currentPlayingItemId = null;
+            }
+            
+            function deleteMukkuItem(id) {
+                if (confirm('Are you sure you want to delete this item?')) {
+                    mukkuItems = mukkuItems.filter(item => item.id !== id);
+                    localStorage.setItem('mukkuItems', JSON.stringify(mukkuItems));
+                    
+                    // If we're deleting the currently playing item, close the media player
+                    if (currentPlayingItemId === id) {
+                        closeMediaPlayer();
+                    }
+                    
+                    // Show notification
+                    showNotification('Mukku item deleted!', 'bg-red-600');
+                    
+                    // Refresh items
+                    renderMukkuItems();
+                }
+            }
+            
+            function deleteCurrentItem() {
+                if (currentPlayingItemId) {
+                    deleteMukkuItem(currentPlayingItemId);
+                }
+                closeMediaPlayer();
+            }
+            
+            function showNotification(message, colorClass) {
+                const notification = document.createElement('div');
+                notification.className = `fixed top-4 right-4 ${colorClass} text-white px-5 py-3 rounded-lg shadow-lg flex items-center z-50 animate__animated animate__fadeInDown`;
+                notification.innerHTML = `
+                    <i class="fas fa-check-circle mr-2"></i> ${message}
+                `;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    notification.style.transition = 'opacity 0.5s ease-out';
+                    setTimeout(() => notification.remove(), 500);
+                }, 3000);
+            }
+            
+            function toggleSearchBar() {
+                searchBar.classList.toggle('hidden');
+                if (!searchBar.classList.contains('hidden')) {
+                    searchInput.focus();
+                }
+            }
+            
+            function searchItems() {
+                const searchTerm = searchInput.value.trim().toLowerCase();
+                
+                if (!searchTerm) {
+                    renderMukkuItems();
+                    return;
+                }
+                
+                const filteredItems = mukkuItems.filter(item => {
+                    return (
+                        item.title.toLowerCase().includes(searchTerm) ||
+                        new Date(item.date).toLocaleDateString().toLowerCase().includes(searchTerm)
+                    );
+                });
+                
+                renderFilteredItems(filteredItems);
+            }
+            
+            function renderFilteredItems(items) {
+                mukkuGrid.innerHTML = '';
+                
+                if (items.length === 0) {
+                    mukkuGrid.innerHTML = `
+                        <div class="col-span-full text-center py-10">
+                            <i class="fas fa-search text-indigo-300 text-4xl mb-3"></i>
+                            <h3 class="text-xl text-gray-200 mb-1">No Items Found</h3>
+                            <p class="text-gray-400">Try a different search term</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                items.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'media-card bg-gray-800 rounded-xl overflow-hidden shadow-lg cursor-pointer';
+                    itemElement.dataset.id = item.id;
+                    
+                    // Determine media type icon
+                    let iconClass = 'fas fa-file';
+                    if (item.media.type === 'audio') {
+                        iconClass = 'fas fa-music text-purple-400';
+                    } else if (item.media.type === 'video') {
+                        iconClass = 'fas fa-video text-blue-400';
+                    } else if (item.media.type === 'random-song') {
+                        iconClass = 'fas fa-link text-green-400';
+                    }
+                    
+                    itemElement.innerHTML = `
+                        <div class="relative">
+                            <img src="${item.photo}" alt="${item.title}" class="w-full h-48 object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-90"></div>
+                            <div class="absolute top-2 right-2 bg-indigo-700 px-2 py-1 rounded-md text-xs">
+                                <i class="${iconClass}"></i>
+                            </div>
+                            <div class="absolute bottom-3 left-3">
+                                <h3 class="font-bold text-lg truncate max-w-[90%]">${item.title}</h3>
+                            </div>
+                        </div>
+                        <div class="p-4 pt-2 text-gray-300">
+                            <div class="flex items-center justify-between text-sm">
+                                <span>${new Date(item.date).toLocaleDateString()}</span>
+                                <button class="delete-btn text-gray-400 hover:text-red-400">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    itemElement.addEventListener('click', () => playMukkuItem(item.id));
+                    
+                    // Add delete button event listener
+                    const deleteBtn = itemElement.querySelector('.delete-btn');
+                    deleteBtn.addEventListener('click', function(e) {
+                        e.stopPropagation(); // Prevent triggering the play event
+                        deleteMukkuItem(item.id);
+                    });
+                    
+                    mukkuGrid.appendChild(itemElement);
+                });
+            }
+            
+            function toggleSortOrder() {
+                sortOrder = sortOrder === 'newest' ? 'oldest' : 'newest';
+                showNotification(`Sorted by ${sortOrder === 'newest' ? 'newest first' : 'oldest first'}`, 'bg-indigo-600');
+                renderMukkuItems();
+            }
+            
+            // Setup form validation
+            document.getElementById('item-title').addEventListener('input', validateForm);
+            document.getElementById('video-upload').addEventListener('change', function() {
+                validateForm();
+                if (this.files.length) {
+                    currentMediaFile = this.files[0];
+                }
+            });
+            document.getElementById('audio-upload').addEventListener('change', function() {
+                validateForm();
+                if (this.files.length) {
+                    currentMediaFile = this.files[0];
+                }
+            });
+            document.getElementById('spotify-link').addEventListener('input', validateForm);
+            document.getElementById('youtube-link').addEventListener('input', validateForm);
+            document.getElementById('local-song').addEventListener('change', function() {
+                validateForm();
+                if (this.files.length) {
+                    currentMediaFile = this.files[0];
+                }
+            });
+            document.getElementById('song-source').addEventListener('change', function() {
+                validateForm();
+                if (currentMediaType === 'random-song') {
+                    document.getElementById('spotify-link').value = '';
+                    document.getElementById('youtube-link').value = '';
+                    document.getElementById('local-song').value = '';
+                }
+            });
+            
+            // Close modals when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target === addItemModal) {
+                    addItemModal.style.display = 'none';
+                    resetMediaType();
+                }
+                if (event.target === mediaModal) {
+                    closeMediaPlayer();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
